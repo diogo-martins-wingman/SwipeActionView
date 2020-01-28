@@ -304,9 +304,9 @@ open class SwipeActionView : FrameLayout {
         if (childCount < 1) {
             throw IllegalStateException("Specify at least 1 child view to use as foreground content.")
         }
-        if (childCount > 3) {
+        /*if (childCount > 3) {
             throw IllegalStateException("Specify only up to 3 views.")
-        }
+        }*/
 
         // The swipe direction of child views is determined by their `layout_gravity` attribute.
         // When they have set the `end` or `right` flags then they will be swipe-able to the left
