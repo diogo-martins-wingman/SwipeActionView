@@ -340,41 +340,42 @@ open class SwipeActionView : FrameLayout {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
+        if(::container.isInitialized){
+            swipeBounds.setBoundsFrom(container)
 
-        swipeBounds.setBoundsFrom(container)
+            leftSwipeRipple.bounds = swipeBounds
+            rightSwipeRipple.bounds = swipeBounds
 
-        leftSwipeRipple.bounds = swipeBounds
-        rightSwipeRipple.bounds = swipeBounds
+            val verticalCenter = ((bottom - top) / 2).toFloat()
+            val width = swipeBounds.right - swipeBounds.left
+            leftSwipeRipple.setCenter((edgeSlop + width).toFloat(), verticalCenter)
+            rightSwipeRipple.setCenter(-edgeSlop.toFloat(), verticalCenter)
 
-        val verticalCenter = ((bottom - top) / 2).toFloat()
-        val width = swipeBounds.right - swipeBounds.left
-        leftSwipeRipple.setCenter((edgeSlop + width).toFloat(), verticalCenter)
-        rightSwipeRipple.setCenter(-edgeSlop.toFloat(), verticalCenter)
+            val maxRadius = radius(width.toDouble(), verticalCenter.toDouble()).toFloat()
+            leftSwipeRipple.maxRadius = maxRadius
+            rightSwipeRipple.maxRadius = maxRadius
 
-        val maxRadius = radius(width.toDouble(), verticalCenter.toDouble()).toFloat()
-        leftSwipeRipple.maxRadius = maxRadius
-        rightSwipeRipple.maxRadius = maxRadius
+            maxLeftSwipeDistance = leftSwipeView?.let {
+                it.totalWidth.toFloat() - container.marginEnd
+            } ?: 0f
 
-        maxLeftSwipeDistance = leftSwipeView?.let {
-            it.totalWidth.toFloat() - container.marginEnd
-        } ?: 0f
+            maxRightSwipeDistance = rightSwipeView?.let {
+                it.totalWidth.toFloat() - container.marginStart
+            } ?: 0f
 
-        maxRightSwipeDistance = rightSwipeView?.let {
-            it.totalWidth.toFloat() - container.marginStart
-        } ?: 0f
-
-        if (isInEditMode) {
-            when (previewBackground) {
-                SwipeDirection.LEFT -> leftSwipeView?.let {
-                    container.translationX = -maxLeftSwipeDistance
+            if (isInEditMode) {
+                when (previewBackground) {
+                    SwipeDirection.LEFT -> leftSwipeView?.let {
+                        container.translationX = -maxLeftSwipeDistance
+                    }
+                    SwipeDirection.RIGHT -> rightSwipeView?.let {
+                        container.translationX = maxRightSwipeDistance
+                    }
                 }
-                SwipeDirection.RIGHT -> rightSwipeView?.let {
-                    container.translationX = maxRightSwipeDistance
-                }
+
+                leftSwipeRipple.progress = 0.75f
+                rightSwipeRipple.progress = 0.75f
             }
-
-            leftSwipeRipple.progress = 0.75f
-            rightSwipeRipple.progress = 0.75f
         }
     }
 
