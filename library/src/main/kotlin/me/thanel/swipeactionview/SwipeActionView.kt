@@ -49,7 +49,7 @@ import me.thanel.swipeactionview.utils.totalWidth
  * View that allows users to perform various actions by swiping it to the left or right sides.
  */
 @Suppress("MemberVisibilityCanBePrivate")
-public class SwipeActionView : FrameLayout {
+open class SwipeActionView : FrameLayout {
     /**
      * Distance from edges in pixels that prevents starting of drag movement.
      *
