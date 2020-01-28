@@ -304,9 +304,9 @@ open class SwipeActionView : FrameLayout {
         if (childCount < 1) {
             throw IllegalStateException("Specify at least 1 child view to use as foreground content.")
         }
-        /*if (childCount > 3) {
+        if (childCount > 3) {
             throw IllegalStateException("Specify only up to 3 views.")
-        }*/
+        }
 
         // The swipe direction of child views is determined by their `layout_gravity` attribute.
         // When they have set the `end` or `right` flags then they will be swipe-able to the left
@@ -321,7 +321,7 @@ open class SwipeActionView : FrameLayout {
                 rightSwipeView = firstChild
             }
 
-            if (childCount > 3) {
+            if (childCount == 3) {
                 val secondChild = getChildAt(1)
 
                 if (secondChild.isRightAligned()) {
@@ -340,7 +340,7 @@ open class SwipeActionView : FrameLayout {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-      
+
         swipeBounds.setBoundsFrom(container)
 
         leftSwipeRipple.bounds = swipeBounds
@@ -575,7 +575,7 @@ open class SwipeActionView : FrameLayout {
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        
+
         canvas.drawInBoundsOf(container, includePadding = rippleTakesPadding) {
             if (isInEditMode) {
                 when (previewRipple) {
