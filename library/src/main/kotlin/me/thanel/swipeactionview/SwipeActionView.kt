@@ -576,29 +576,30 @@ open class SwipeActionView : FrameLayout {
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-
-        canvas.drawInBoundsOf(container, includePadding = rippleTakesPadding) {
-            if (isInEditMode) {
-                when (previewRipple) {
-                    SwipeDirection.LEFT -> {
-                        if (leftSwipeRipple.hasColor) {
-                            leftSwipeRipple.draw(canvas)
+        if(::container.isInitialized){
+            canvas.drawInBoundsOf(container, includePadding = rippleTakesPadding) {
+                if (isInEditMode) {
+                    when (previewRipple) {
+                        SwipeDirection.LEFT -> {
+                            if (leftSwipeRipple.hasColor) {
+                                leftSwipeRipple.draw(canvas)
+                            }
+                        }
+                        SwipeDirection.RIGHT -> {
+                            if (rightSwipeRipple.hasColor) {
+                                rightSwipeRipple.draw(canvas)
+                            }
                         }
                     }
-                    SwipeDirection.RIGHT -> {
-                        if (rightSwipeRipple.hasColor) {
-                            rightSwipeRipple.draw(canvas)
-                        }
-                    }
+                    return@drawInBoundsOf
                 }
-                return@drawInBoundsOf
-            }
 
-            if (leftSwipeRipple.hasColor && leftSwipeRipple.isRunning) {
-                leftSwipeRipple.draw(canvas)
-            }
-            if (rightSwipeRipple.hasColor && rightSwipeRipple.isRunning) {
-                rightSwipeRipple.draw(canvas)
+                if (leftSwipeRipple.hasColor && leftSwipeRipple.isRunning) {
+                    leftSwipeRipple.draw(canvas)
+                }
+                if (rightSwipeRipple.hasColor && rightSwipeRipple.isRunning) {
+                    rightSwipeRipple.draw(canvas)
+                }
             }
         }
     }
