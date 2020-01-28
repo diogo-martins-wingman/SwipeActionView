@@ -321,7 +321,7 @@ open class SwipeActionView : FrameLayout {
                 rightSwipeView = firstChild
             }
 
-            if (childCount == 3) {
+            if (childCount > 3) {
                 val secondChild = getChildAt(1)
 
                 if (secondChild.isRightAligned()) {
