@@ -177,7 +177,7 @@ open class SwipeActionView : FrameLayout {
     /**
      * The container view which is displayed above [leftSwipeView] and [rightSwipeView].
      */
-    private lateinit var container: View
+    lateinit var container: View
 
     /**
      * The maximum distance allowed for dragging of the view to the left side.
@@ -340,42 +340,41 @@ open class SwipeActionView : FrameLayout {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        if(::container.isInitialized){
-            swipeBounds.setBoundsFrom(container)
+      
+        swipeBounds.setBoundsFrom(container)
 
-            leftSwipeRipple.bounds = swipeBounds
-            rightSwipeRipple.bounds = swipeBounds
+        leftSwipeRipple.bounds = swipeBounds
+        rightSwipeRipple.bounds = swipeBounds
 
-            val verticalCenter = ((bottom - top) / 2).toFloat()
-            val width = swipeBounds.right - swipeBounds.left
-            leftSwipeRipple.setCenter((edgeSlop + width).toFloat(), verticalCenter)
-            rightSwipeRipple.setCenter(-edgeSlop.toFloat(), verticalCenter)
+        val verticalCenter = ((bottom - top) / 2).toFloat()
+        val width = swipeBounds.right - swipeBounds.left
+        leftSwipeRipple.setCenter((edgeSlop + width).toFloat(), verticalCenter)
+        rightSwipeRipple.setCenter(-edgeSlop.toFloat(), verticalCenter)
 
-            val maxRadius = radius(width.toDouble(), verticalCenter.toDouble()).toFloat()
-            leftSwipeRipple.maxRadius = maxRadius
-            rightSwipeRipple.maxRadius = maxRadius
+        val maxRadius = radius(width.toDouble(), verticalCenter.toDouble()).toFloat()
+        leftSwipeRipple.maxRadius = maxRadius
+        rightSwipeRipple.maxRadius = maxRadius
 
-            maxLeftSwipeDistance = leftSwipeView?.let {
-                it.totalWidth.toFloat() - container.marginEnd
-            } ?: 0f
+        maxLeftSwipeDistance = leftSwipeView?.let {
+            it.totalWidth.toFloat() - container.marginEnd
+        } ?: 0f
 
-            maxRightSwipeDistance = rightSwipeView?.let {
-                it.totalWidth.toFloat() - container.marginStart
-            } ?: 0f
+        maxRightSwipeDistance = rightSwipeView?.let {
+            it.totalWidth.toFloat() - container.marginStart
+        } ?: 0f
 
-            if (isInEditMode) {
-                when (previewBackground) {
-                    SwipeDirection.LEFT -> leftSwipeView?.let {
-                        container.translationX = -maxLeftSwipeDistance
-                    }
-                    SwipeDirection.RIGHT -> rightSwipeView?.let {
-                        container.translationX = maxRightSwipeDistance
-                    }
+        if (isInEditMode) {
+            when (previewBackground) {
+                SwipeDirection.LEFT -> leftSwipeView?.let {
+                    container.translationX = -maxLeftSwipeDistance
                 }
-
-                leftSwipeRipple.progress = 0.75f
-                rightSwipeRipple.progress = 0.75f
+                SwipeDirection.RIGHT -> rightSwipeView?.let {
+                    container.translationX = maxRightSwipeDistance
+                }
             }
+
+            leftSwipeRipple.progress = 0.75f
+            rightSwipeRipple.progress = 0.75f
         }
     }
 
@@ -576,30 +575,29 @@ open class SwipeActionView : FrameLayout {
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        if(::container.isInitialized){
-            canvas.drawInBoundsOf(container, includePadding = rippleTakesPadding) {
-                if (isInEditMode) {
-                    when (previewRipple) {
-                        SwipeDirection.LEFT -> {
-                            if (leftSwipeRipple.hasColor) {
-                                leftSwipeRipple.draw(canvas)
-                            }
-                        }
-                        SwipeDirection.RIGHT -> {
-                            if (rightSwipeRipple.hasColor) {
-                                rightSwipeRipple.draw(canvas)
-                            }
+        
+        canvas.drawInBoundsOf(container, includePadding = rippleTakesPadding) {
+            if (isInEditMode) {
+                when (previewRipple) {
+                    SwipeDirection.LEFT -> {
+                        if (leftSwipeRipple.hasColor) {
+                            leftSwipeRipple.draw(canvas)
                         }
                     }
-                    return@drawInBoundsOf
+                    SwipeDirection.RIGHT -> {
+                        if (rightSwipeRipple.hasColor) {
+                            rightSwipeRipple.draw(canvas)
+                        }
+                    }
                 }
+                return@drawInBoundsOf
+            }
 
-                if (leftSwipeRipple.hasColor && leftSwipeRipple.isRunning) {
-                    leftSwipeRipple.draw(canvas)
-                }
-                if (rightSwipeRipple.hasColor && rightSwipeRipple.isRunning) {
-                    rightSwipeRipple.draw(canvas)
-                }
+            if (leftSwipeRipple.hasColor && leftSwipeRipple.isRunning) {
+                leftSwipeRipple.draw(canvas)
+            }
+            if (rightSwipeRipple.hasColor && rightSwipeRipple.isRunning) {
+                rightSwipeRipple.draw(canvas)
             }
         }
     }
