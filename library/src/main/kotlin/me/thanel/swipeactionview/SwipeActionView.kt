@@ -468,6 +468,13 @@ open class SwipeActionView : FrameLayout {
             canPerformSwipeAction = true
         }
     }
+    
+     @JvmOverloads
+    fun toOriginalPosition(startDelay: Long = 0) {
+        animateContainer(0f, 0, startDelay) {
+            canPerformSwipeAction = true
+        }
+    }
 
     /**
      * Animate the view in the specified [swipeDirection].
